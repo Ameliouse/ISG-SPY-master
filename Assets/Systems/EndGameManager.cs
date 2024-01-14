@@ -27,6 +27,8 @@ public class EndGameManager : FSystem {
 
 	public GameObject playButtonAmount;
 	public GameObject endPanel;
+	public GameObject bag;
+
 
 	public EndGameManager()
 	{
@@ -81,7 +83,7 @@ public class EndGameManager : FSystem {
 							// trigger end
 							GameObjectManager.addComponent<NewEnd>(MainLoop.instance.gameObject, new { endType = NewEnd.Win });
 						else
-							GameObjectManager.addComponent<NewEnd>(MainLoop.instance.gameObject, new { endType = NewEnd.BadCondition });
+							GameObjectManager.addComponent<NewEnd>(MainLoop.instance.gameObject, new { endType = NewEnd.BadConditionPage });
 
 					}
 				}
@@ -103,6 +105,8 @@ public class EndGameManager : FSystem {
 	private void displayEndPanel(GameObject unused)
 	{
 		// display end panel (we need immediate enabling)
+		bag.gameObject.SetActive(false);
+
 		endPanel.transform.parent.gameObject.SetActive(true);
 		// Get the first end that occurs
 		if (f_requireEndPanel.First().GetComponent<NewEnd>().endType == NewEnd.Detected)
@@ -198,6 +202,28 @@ public class EndGameManager : FSystem {
 				objectType = "program",
 				activityExtensions = new Dictionary<string, string>() {
 					{ "error", "BadCondition" }
+				}
+			}));
+		}
+		else if (f_requireEndPanel.First().GetComponent<NewEnd>().endType == NewEnd.BadConditionPage)
+		{
+			GameObjectManager.setGameObjectState(endPanel.transform.Find("ScoreCanvas").gameObject, false);
+			endPanel.GetComponentInChildren<TextMeshProUGUI>().text = gameData.localization[45];
+			Transform buttons = endPanel.transform.Find("Buttons");
+			GameObjectManager.setGameObjectState(buttons.Find("ReloadLevel").gameObject, true);
+			GameObjectManager.setGameObjectState(buttons.Find("ReloadState").gameObject, false);
+			GameObjectManager.setGameObjectState(buttons.Find("MainMenu").gameObject, true);
+			GameObjectManager.setGameObjectState(buttons.Find("NextLevel").gameObject, false);
+			MainLoop.instance.StartCoroutine(delayNewButtonFocused(buttons.Find("ReloadState").gameObject));
+			endPanel.GetComponent<AudioSource>().clip = Resources.Load("Sound/LoseSound") as AudioClip;
+			endPanel.GetComponent<AudioSource>().loop = true;
+			endPanel.GetComponent<AudioSource>().Play();
+			MainLoop.instance.StartCoroutine(delaySendStatement(endPanel, new
+			{
+				verb = "bugged",
+				objectType = "program",
+				activityExtensions = new Dictionary<string, string>() {
+					{ "error", "BadConditionPage" }
 				}
 			}));
 		}

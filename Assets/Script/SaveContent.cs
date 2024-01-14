@@ -58,6 +58,8 @@ public class SaveContent {
     public class RawSave
     {
         public List<bool> coinsState = new List<bool>();
+        public List<bool> documentsState = new List<bool>();
+
         public List<Direction.Dir> directions = new List<Direction.Dir>();
         public List<RawPosition> positions = new List<RawPosition>();
         public List<RawActivable> activables = new List<RawActivable>();

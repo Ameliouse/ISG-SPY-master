@@ -53,6 +53,7 @@ public class UISystem : FSystem {
 	public GameObject libraryPanel;
 	public GameObject virtualKeyboard;
 
+
 	public static UISystem instance;
 
 	public UISystem(){
@@ -266,6 +267,8 @@ public class UISystem : FSystem {
 		gameData.totalStep = 0;
 		gameData.totalExecute = 0;
 		gameData.totalCoin = 0;
+		gameData.totalDoc = 0;
+		gameData.totalDocToCollect = 0;
 		gameData.levelToLoadScore = null;
 }
 

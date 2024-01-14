@@ -32,6 +32,10 @@ public class LevelGenerator : FSystem {
 	public GameObject library; // Le viewport qui contient la librairie
 	public TMP_Text levelName;
 	public GameObject buttonExecute;
+	public GameObject bag;
+	public TMP_Text totalDocText;
+
+
 
 	[DllImport("__Internal")]
 	private static extern void HideHtmlButtons(); // call javascript
@@ -43,6 +47,7 @@ public class LevelGenerator : FSystem {
 
 	protected override void onStart()
 	{
+
 		GameObject gameDataGO = GameObject.Find("GameData");
 		if (gameDataGO == null)
 			GameObjectManager.loadScene("TitleScreen");
@@ -67,6 +72,15 @@ public class LevelGenerator : FSystem {
 					{ "progress", levelToLoad.name }
 				}
 			});
+			totalDocText.SetText(gameData.totalDoc+"/"+gameData.totalDocToCollect);
+			if (gameData.totalDocToCollect == 0)
+			{
+				bag.gameObject.SetActive(false);
+			}
+			else
+			{
+				bag.gameObject.SetActive(true);
+			}
 		}
 	}
 

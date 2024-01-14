@@ -62,7 +62,7 @@ public class DialogSystem : FSystem
 	}
 
 
-	// Affiche le panneau de dialoge au début de niveau (si besoin)
+	// Affiche le panneau de dialoge au dï¿½but de niveau (si besoin)
 	public void showDialogPanel()
 	{
 		GameObjectManager.setGameObjectState(dialogPanel.transform.parent.gameObject, true);
@@ -83,7 +83,7 @@ public class DialogSystem : FSystem
 	// Permet d'afficher la suite du dialogue
 	public void nextDialog()
 	{
-		nDialog++; // On incrémente le nombre de dialogue
+		nDialog++; // On incrï¿½mente le nombre de dialogue
 
 		string content = configureDialog(1);
 
@@ -99,10 +99,10 @@ public class DialogSystem : FSystem
 	}
 
 	// See PreviousButton in editor
-	// Permet d'afficher le message précédent
+	// Permet d'afficher le message prï¿½cï¿½dent
 	public void prevDialog()
 	{
-		nDialog--; // On décrémente le nombre de dialogue
+		nDialog--; // On dï¿½crï¿½mente le nombre de dialogue
 
 		string content = configureDialog(-1);
 
@@ -267,7 +267,7 @@ public class DialogSystem : FSystem
 
 
 	// See OKButton in editor
-	// Désactive le panel de dialogue
+	// Dï¿½sactive le panel de dialogue
 	public void closeDialogPanel()
 	{
 		GameObjectManager.setGameObjectState(dialogPanel.transform.parent.gameObject, false);

@@ -331,7 +331,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 13138334633984
-    m_Localized: Avancer d'une case
+    m_Localized: Page
     m_Metadata:
       m_Items: []
   - m_Id: 13606830002176
@@ -1295,7 +1295,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 18085240219451392
-    m_Localized: Doc
+    m_Localized: Coin
     m_Metadata:
       m_Items: []
   - m_Id: 18085266488377344

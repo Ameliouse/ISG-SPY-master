@@ -1,7 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
+
 using FYFY;
 using System.Collections;
 using FYFY_plugins.TriggerManager;
+using TMPro;
 
 /// <summary>
 /// Manage collision between player agents and Coins
@@ -14,6 +18,9 @@ public class DocManager : FSystem {
 
 	private GameData gameData;
     private bool activeDoc;
+	public GameObject bag;
+	public TMP_Text totalDocText;
+
 
 	protected override void onStart()
     {
@@ -33,7 +40,10 @@ public class DocManager : FSystem {
 			foreach(GameObject target in trigger.Targets){
 				//Check if the player collide with a coin
                 if(target.CompareTag("Document")){
-                    gameData.totalDoc++;
+					GameObject page = UnityEngine.Object.Instantiate<GameObject>(Resources.Load ("Prefabs/Page") as GameObject, bag.transform);
+					GameObjectManager.bind(page);
+					gameData.totalDoc++;
+					totalDocText.SetText(gameData.totalDoc+"/"+gameData.totalDocToCollect);
 					target.GetComponent<Collider>().enabled = false;
                     MainLoop.instance.StartCoroutine(docDestroy(target));
 				}
@@ -47,4 +57,5 @@ public class DocManager : FSystem {
 		yield return new WaitForSeconds(1f); // let time for animation
 		GameObjectManager.setGameObjectState(go, false); // then disabling GameObject
 	}
+
 }

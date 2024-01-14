@@ -9,6 +9,8 @@ public class LevelGenerator_wrapper : BaseWrapper
 	public UnityEngine.GameObject library;
 	public TMPro.TMP_Text levelName;
 	public UnityEngine.GameObject buttonExecute;
+	public UnityEngine.GameObject bag;
+	public TMPro.TMP_Text totalDocText;
 	private void Start()
 	{
 		this.hideFlags = HideFlags.NotEditable;
@@ -18,6 +20,8 @@ public class LevelGenerator_wrapper : BaseWrapper
 		MainLoop.initAppropriateSystemField (system, "library", library);
 		MainLoop.initAppropriateSystemField (system, "levelName", levelName);
 		MainLoop.initAppropriateSystemField (system, "buttonExecute", buttonExecute);
+		MainLoop.initAppropriateSystemField (system, "bag", bag);
+		MainLoop.initAppropriateSystemField (system, "totalDocText", totalDocText);
 	}
 
 }

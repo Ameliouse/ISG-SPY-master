@@ -256,7 +256,12 @@ public class SaveFileSystem : FSystem
 					break;
 
 				default:
-					if (fo.type != Cell.Coin)
+					if (fo.type == Cell.Document)
+					{
+						levelExport += "\t<document posX=\"" + (fo.col + 1 - minCol) + "\" posY=\"" + (fo.line + 1 - minLine) + "\" />\n\n";
+						break;
+					}
+					if ((fo.type != Cell.Coin) && (fo.type != Cell.Document))
 					{
 						Debug.Log("Unexpected floor object type, object ignored: " + fo.type);
 						break;

@@ -1,6 +1,8 @@
 using UnityEngine;
 using FYFY;
 using TMPro;
+using System.Collections;
+
 using UnityEngine.UI;
 
 /// <summary>
@@ -9,6 +11,9 @@ using UnityEngine.UI;
 public class GameStateManager : FSystem {
 
     private Family f_coins = FamilyManager.getFamily(new AnyOfTags("Coin"));
+    private Family f_documents = FamilyManager.getFamily(new AnyOfTags("Document"));
+    private Family f_pages = FamilyManager.getFamily(new AnyOfTags("Page"));
+
     private Family f_directions = FamilyManager.getFamily(new AllOfComponents(typeof(Direction)), new NoneOfComponents(typeof(Detector)));
     private Family f_positions = FamilyManager.getFamily(new AllOfComponents(typeof(Position)), new NoneOfComponents(typeof(Detector)));
     private Family f_activables = FamilyManager.getFamily(new AllOfComponents(typeof(Activable)));
@@ -17,6 +22,8 @@ public class GameStateManager : FSystem {
 
     private Family f_playingMode = FamilyManager.getFamily(new AllOfComponents(typeof(PlayMode)));
 
+	private GameData gameData;
+
     private SaveContent save;
 
     private string currentContent;
@@ -24,6 +31,8 @@ public class GameStateManager : FSystem {
     public GameObject playButtonAmount;
 
     public GameObject level;
+    public GameObject bag;
+
 
     public static GameStateManager instance;
 
@@ -33,6 +42,10 @@ public class GameStateManager : FSystem {
 	}
     protected override void onStart()
     {
+        GameObject go = GameObject.Find("GameData");
+		if (go != null)
+			gameData = go.GetComponent<GameData>();
+
         save = new SaveContent();
         f_playingMode.addEntryCallback(delegate { SaveState(); });
     }
@@ -44,6 +57,9 @@ public class GameStateManager : FSystem {
         save.rawSave.coinsState.Clear();
         foreach (GameObject coin in f_coins)
             save.rawSave.coinsState.Add(coin.activeSelf);
+        save.rawSave.documentsState.Clear();
+        foreach (GameObject document in f_documents)
+            save.rawSave.documentsState.Add(document.activeSelf);
         save.rawSave.directions.Clear();
         foreach (GameObject dir in f_directions)
             save.rawSave.directions.Add(dir.GetComponent<Direction>().direction);
@@ -75,12 +91,30 @@ public class GameStateManager : FSystem {
     // Load saved state an restore data on interactable game objects
     public void LoadState()
     {
+        if (gameData.totalDocToCollect == 0)
+		{
+			bag.gameObject.SetActive(false);
+		}
+		else
+		{
+			bag.gameObject.SetActive(true);
+		}
+
         save.rawSave = JsonUtility.FromJson<SaveContent.RawSave>(currentContent);
         for (int i = 0; i < f_coins.Count && i < save.rawSave.coinsState.Count ; i++)
         {
             GameObjectManager.setGameObjectState(f_coins.getAt(i), save.rawSave.coinsState[i]);
             f_coins.getAt(i).GetComponent<Renderer>().enabled = save.rawSave.coinsState[i];
         }
+        for (int i = 0; i < f_documents.Count && i < save.rawSave.documentsState.Count ; i++)
+        {
+            GameObjectManager.setGameObjectState(f_documents.getAt(i), save.rawSave.documentsState[i]);
+            f_documents.getAt(i).GetComponent<Renderer>().enabled = save.rawSave.documentsState[i];
+            // GameObjectManager.setGameObjectState(f_pages.getAt(i), false);
+
+        }
+        // gameData.totalDoc = gameData.totalDoc - i;
+
         for (int i = 0; i < f_directions.Count && i < save.rawSave.directions.Count ; i++)
             f_directions.getAt(i).GetComponent<Direction>().direction = save.rawSave.directions[i];
         for (int i = 0; i < f_positions.Count && i < save.rawSave.positions.Count ; i++)
@@ -88,7 +122,7 @@ public class GameStateManager : FSystem {
             Position pos = f_positions.getAt(i).GetComponent<Position>();
             pos.x = save.rawSave.positions[i].x;
             pos.y = save.rawSave.positions[i].y;
-            // Téléport object to the right position
+            // Tï¿½lï¿½port object to the right position
             pos.transform.position = level.transform.position + new Vector3(pos.y * 3, pos.transform.position.y - level.transform.position.y, pos.x * 3);
         }
         for (int i = 0; i < f_activables.Count && i < save.rawSave.activables.Count; i++)
